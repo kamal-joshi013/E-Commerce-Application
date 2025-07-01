@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import UserRepository from "../repositry/user.repository.js";
+import ApplicationError from "../../../errorHandling/errorHandling.js";
 export default class UserController {
   constructor(){
     this.userRepository = new UserRepository();
@@ -8,6 +9,10 @@ export default class UserController {
   async userSignUp(req, res,next) {
     try{
     const { username, email, password, userType } = req.body;
+    const user = await this.userRepository.findByEmail(email);
+    if(user){
+       throw new ApplicationError("email already exist",400)
+    }
     const newUser = await this.userRepository.signUp(username,email,password,userType); 
     res.status(201).send(newUser);
     }catch(err){

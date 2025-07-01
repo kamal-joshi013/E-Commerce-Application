@@ -5,6 +5,7 @@ import ApplicationError from "../../../errorHandling/errorHandling.js";
 
 
 export default class UserRepository {
+  
   async signUp(username,email,password,userType) {
    try {
       const newUser = await new UserModel({username,email,password,userType});
